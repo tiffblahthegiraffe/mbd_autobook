@@ -8,13 +8,22 @@ class MyDrive:
     def get_site(self,url):
         self.driver.get(url)
 
-    def find_element(self, search_term, class_name = False, id = False, xpath = False):
+    def find_element(self, search_term, class_name = False, id = False, xpath = False, multi = False):
         if class_name:
-            elem = self.driver.find_element_by_class_name(search_term)
+            if multi:
+                elem = self.driver.find_elements_by_class_name(search_term)
+            else:
+                elem = self.driver.find_element_by_class_name(search_term)
         elif id:
-            elem = self.driver.find_element_by_id(search_term)
+            if multi:
+                elem = self.driver.find_elements_by_id(search_term)
+            else:
+                elem = self.driver.find_element_by_id(search_term)
         elif xpath:
-            elem = self.driver.find_element_by_xpath
+            if multi:
+                elem = self.driver.find_elements_by_xpath(search_term)
+            else:
+                elem = self.driver.find_element_by_xpath(search_term)
         else:
             print('ERROR: please specify an element type (class_name, id, xpath)')
         return elem
