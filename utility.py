@@ -7,13 +7,15 @@ class MyDrive():
     def get_site(self,url):
         self.driver.get(url)
 
-    def click_button(self, search_term, class_name = True, id = False, xpath = False):
+    def click_button(self, search_term, class_name = False, id = False, xpath = False):
         if class_name:
             button = self.driver.find_element_by_class_name(search_term)
         elif id:
             button = self.driver.find_element_by_id(search_term)
         elif xpath:
             button = self.driver.find_element_by_xpath
+        else:
+            print('ERROR: please specify an element type (class_name, id, xpath)')
         button.click()
 
     def close_drive(self):
