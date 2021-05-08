@@ -1,8 +1,9 @@
 from selenium import webdriver
 
-class MyDrive():
-    def __int__(self, path):
-        self.driver = webdriver.Chrome(path)
+class MyDrive:
+    def __init__(self, path):
+        self.path = path
+        self.driver = webdriver.Chrome(self.path)
 
     def get_site(self,url):
         self.driver.get(url)
