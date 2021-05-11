@@ -1,17 +1,19 @@
 import time
+import datetime
 from utility import MyDrive
 from selenium.common.exceptions import NoSuchElementException
 
 driver_path = '/Users/tiffanysung/Documents/chromedriver'
 mbd_url = 'https://clients.mindbodyonline.com/classic/mainclass?studioid=841970'
 DAILY_SCHEDULE_PREFERENCE = {'Mon': [5, ['7:15','6:15','8:15']],
-                             'Tue': [5, ['7:15','6:15','8:15']],
+                             'Tue': [5, ['7:15','6:15','8:15','7:00']],
                              'Wed': [5, ['7:15','6:15','8:15']],
                              'Thu': [5, ['7:15','6:15','8:15']],
                              'Fri': [3, ['7:15','6:15','8:15']],
                              'Sat': [3, ['8:00','9:15', '10:']],
                              'Sun': [2, ['9:30','10:30']]}
-DAY_TO_BOOK = 'Mon'
+now = datetime.datetime.now()
+DAY_TO_BOOK = now.strftime("%a")
 
 def log_in(driver, usr_email, usr_pw):
     usr_email_field = driver.find_element('su1UserName',id=True)
