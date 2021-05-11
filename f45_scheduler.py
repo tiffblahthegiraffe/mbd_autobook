@@ -54,36 +54,41 @@ def check_schedule_and_book(schedule_table,DAY_TO_BOOK,DAILY_SCHEDULE_PREFERENCE
                     print('Can\'t signup for %s. Not booked!' % t.text[:10])
 
                 break
+def main():
+    driver = MyDrive(driver_path)
+    # Go on to mbd website
+    driver.get_site(mbd_url)
 
-driver = MyDrive(driver_path)
-# Go on to mbd website
-driver.get_site(mbd_url)
+    # Click sign-in button
+    sign_in_button = driver.find_element('signInButton',class_name=True)
+    driver.click_button(sign_in_button)
 
-# Click sign-in button
-sign_in_button = driver.find_element('signInButton',class_name=True)
-driver.click_button(sign_in_button)
+    #log in
+    with open('mbd_credential.txt','r') as file:
+        usr_email, usr_pw = file.readlines()
+        log_in(driver, usr_email, usr_pw)
+    print('Logged in to mindbody!')
 
-#log in
-with open('mbd_credential.txt','r') as file:
-    usr_email, usr_pw = file.readlines()
-    log_in(driver, usr_email, usr_pw)
+    time.sleep(2) # an important step to wait for page load
+    # Direct to CLASS Tab
+    class_tab = driver.find_element('tabTD7', id=True)
+    driver.click_button(class_tab)
+    time.sleep(1)
 
-time.sleep(2) # an important step to wait for page load
-# Direct to CLASS Tab
-class_tab = driver.find_element('tabTD7', id=True)
-driver.click_button(class_tab)
-time.sleep(1)
+    # Refresh page by clicking Today
+    today_button = driver.find_element('today-button', id=True)
+    driver.click_button(today_button)
+    time.sleep(1)
 
-# Refresh page by clicking Today
-today_button = driver.find_element('today-button', id=True)
-driver.click_button(today_button)
-time.sleep(1)
+    # Get class schedule table
+    table_path = "//table/tbody/tr/td/table[@id ='classSchedule-mainTable']/tbody/tr"
+    schedule_table = driver.find_element(table_path, xpath=True, multi=True)
 
-# Get class schedule table
-table_path = "//table/tbody/tr/td/table[@id ='classSchedule-mainTable']/tbody/tr"
-schedule_table = driver.find_element(table_path, xpath=True, multi=True)
+    # Read table
+    print('Start booking...')
+    sign_up = check_schedule_and_book(schedule_table,DAY_TO_BOOK,DAILY_SCHEDULE_PREFERENCE)
 
-# Read table
-sign_up = check_schedule_and_book(schedule_table,DAY_TO_BOOK,DAILY_SCHEDULE_PREFERENCE)
+    driver.close_drive()
 
-driver.close_drive()
+if __name__ == "__main__":
+    main()
